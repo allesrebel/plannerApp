@@ -35,7 +35,7 @@ ProjectSchema.post('validate', async (doc, next) => {
         next(err);
     }
 
-    // check if users are used in any other projects
+    // check if users are used in any other projects (better put in controller)
     else next();
 });
 
