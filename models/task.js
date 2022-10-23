@@ -1,20 +1,5 @@
 const mongoose = require('mongoose');
 
-const TimelineSchema = new mongoose.Schema({
-    date_assigned: {
-        type: Date,
-        required: true,
-    },
-    date_due: {
-        type: Date,
-        required: true,
-    },
-    date_updated: {
-        type: Date,
-        default: Date.now(),
-    },
-});
-
 // validate that time information makes sense (not in the past)
 
 const TaskSchema = new mongoose.Schema(
@@ -32,7 +17,20 @@ const TaskSchema = new mongoose.Schema(
             required: true,
         },
         timeline: {
-            type: TimelineSchema,
+            type: {
+                date_assigned: {
+                    type: Date,
+                    required: true,
+                },
+                date_due: {
+                    type: Date,
+                    required: true,
+                },
+                date_updated: {
+                    type: Date,
+                    default: Date.now(),
+                },
+            },
             required: true,
         },
         user_id: {
@@ -47,16 +45,22 @@ const TaskSchema = new mongoose.Schema(
         },
     },
     {
-        toJSON: { virtual: true },
-        toObject: { virtual: true },
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     }
 );
 
 // virtuals for this Schema to find which project this task belongs to
 TaskSchema.virtual('project', {
     ref: 'Project',
-    localField: '_id',
-    foreignField: 'task_ids',
+    localField: 'project_id',
+    foreignField: '_id',
+});
+
+TaskSchema.virtual('user', {
+    ref: 'User',
+    localField: 'user_id',
+    foreignField: '_id',
 });
 
 // validate that user belongs only to this project
