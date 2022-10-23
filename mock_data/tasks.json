@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1,
+        "name": "Flush the sink",
+        "details": "Sink water is too warm, flushing it should get rid of the thermal mass",
+        "priority": "low",
+        "status": "in progress",
+        "timeline": {
+            "date_assigned": "9/30/2022",
+            "date_due": "9/30/2022",
+            "date_updated": "9/30/2022"
+        },
+        "user_id": 2,
+        "project_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Replace Heat Pump Code",
+        "details": "It's broken, needs replacement code to push heat away.",
+        "priority": "medium",
+        "status": "in review",
+        "timeline": {
+            "date_assigned": "9/30/2022",
+            "date_due": "9/30/2022",
+            "date_updated": "9/30/2022"
+        },
+        "user_id": 2,
+        "project_id": 1
+    },
+    {
+        "id": 3,
+        "name": "Fan Doesn't Turn on",
+        "details": "Core feature regressed! Needs to be hotfixed back to operational",
+        "priority": "high",
+        "status": "completed",
+        "timeline": {
+            "date_assigned": "2012/11/01",
+            "date_due": "2012/11/01",
+            "date_updated": "2012/11/01"
+        },
+        "user_id": 3,
+        "project_id": 2
+    },
+    {
+        "id": 4,
+        "name": "Coolant Leaking",
+        "details": "Pump code is includes a small leak, needs fixing",
+        "priority": "low",
+        "status": "assigned",
+        "timeline": {
+            "date_assigned": "9/30/2022",
+            "date_due": "9/30/2022",
+            "date_updated": "9/30/2022"
+        },
+        "user_id": 3,
+        "project_id": 2
+    }
+]

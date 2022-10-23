@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "first_name": "Mister",
+        "last_name": "Boss",
+        "title": "Owner",
+        "manager_id": null,
+        "active": true,
+        "project_id": null,
+        "task_ids": []
+    },
+    {
+        "id": 2,
+        "first_name": "Code",
+        "last_name": "Monkey",
+        "title": "SWE I",
+        "manager_id": 1,
+        "active": true,
+        "project_id": 1,
+        "task_ids": [1, 2]
+    },
+    {
+        "id": 3,
+        "first_name": "the",
+        "last_name": "specialist",
+        "title": "Contractor",
+        "manager_id": 1,
+        "active": false,
+        "project_id": 2,
+        "task_ids": [3, 4]
+    }
+]

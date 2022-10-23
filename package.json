@@ -2,9 +2,9 @@
   "name": "lab3",
   "version": "1.0.0",
   "description": "Lab3",
-  "main": "index.js",
+  "main": "mongo-query-script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon mongo-query-script.js"
   },
   "author": "Alles Rebel",
   "license": "ISC",
