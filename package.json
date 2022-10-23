@@ -1,10 +1,11 @@
 {
   "name": "lab3",
   "version": "1.0.0",
-  "description": "Lab3",
+  "description": "Lab3 for class!",
   "main": "mongo-query-script.js",
   "scripts": {
-    "start": "npx nodemon mongo-query-script.js"
+    "start": "node mongo-query-script.js",
+    "dev-server": "npx nodemon mongo-query-script.js"
   },
   "author": "Alles Rebel",
   "license": "ISC",

@@ -213,4 +213,5 @@ part2step1()
     .then(populateDB)
     .then(part2step2)
     .then(part2step3)
-    .then(part2step4);
+    .then(part2step4)
+    .then(process.exit); // done!
