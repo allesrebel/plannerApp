@@ -1,0 +1,55 @@
+RESOURCE ROUTE projects.js
+
+GET   /projects
+   - query param: name
+   - responds with all projects (or with any partial matches using name query param, a string)
+
+GET   /projects/:id
+   - responds with project that matches with :id
+   - If the project has tasks and/or users, then response will include the count/number of these.
+   - If a project does not exist, return an error
+
+POST   /projects
+   - responds with project that matches with id of created project (once request body is parsed and inserted into DB)
+   - if unable to add to DB, returns error ( malformed body, no unique name, etc)
+
+PUT   /projects/:id
+   - responds with project that matches with id of updated project (once request body is parsed, and updated DB)
+   - if unable to update DB entry, returns error (including no id exists, malformed body, no unique name, etc)
+
+
+RESOURCE ROUTE tasks.js
+
+GET   /tasks
+   - responds with all tasks
+
+GET   /tasks/:id
+   - responds with task that matches with :id
+   - If the task does not exist, return an error
+
+POST   /task
+   - responds with task that matches with id of created task (once request body is parsed and inserted into DB)
+   - if unable to add to DB, returns error ( malformed body, invalid users, etc)
+
+PUT   /task/:id
+   - responds with task that matches with id of updated task (once request body is parsed, and updated DB)
+   - if unable to update DB entry, returns error (including if status != 'assigned', malformed body, no id found, etc)
+
+DELETE   /task/:id
+   - just responds with success, if task with id match was dropped/deleted from the DB
+   - if unable to drop/delete DB entry, returns error
+
+
+RESOURCE ROUTE users.js
+
+GET   /users
+   - query param: active
+   - responds with all users (or with only users with that match the active query param [true or false])
+
+GET   /users/:id
+   - responds with user that matches with :id
+   - If the user does not exist, return an error
+
+PUT   /users/:id
+   - responds with user that matches with :id, after marking as active = false in DB
+   - If the user does not exist, return an error

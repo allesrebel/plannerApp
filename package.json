@@ -1,18 +1,26 @@
 {
-  "name": "lab3",
-  "version": "1.0.0",
-  "description": "Lab3 for class!",
-  "main": "mongo-query-script.js",
+  "name": "homework2",
+  "version": "2.0.0",
+  "description": "Homework2 for class!",
+  "main": "app.js",
   "scripts": {
-    "start": "node mongo-query-script.js",
+    "start": "node ./bin/www",
+    "setup_db": "node mongo-query-script.js",
     "dev-server": "npx nodemon mongo-query-script.js"
   },
   "author": "Alles Rebel",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prettier": "2.7.1"
   },
   "dependencies": {
-    "mongoose": "^6.6.7"
+    "mongoose": "^6.6.7",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "^3.0.2"
   }
 }

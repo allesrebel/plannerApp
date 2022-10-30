@@ -1,0 +1,1712 @@
+{
+	"info": {
+		"_postman_id": "f2c3ba01-f0b2-47d7-b6b3-5adc1beb47d4",
+		"name": "Homework2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all projects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/projects",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/projects",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "342"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"156-DtqjTBptGwD/jswzT1DgKR9Fp6g\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 06:46:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Super Cool Project\",\n        \"description\": \"Things are a bit too spicy. Spike it down\",\n        \"repository\": \"git://gud.com\",\n        \"manager_id\": 1,\n        \"task_ids\": [\n            1,\n            2\n        ],\n        \"user_ids\": [\n            2\n        ]\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Kinda Coool Project\",\n        \"description\": \"Things are a bit warm. Let's fix it\",\n        \"repository\": \"svn://we.dont.use\",\n        \"manager_id\": 1,\n        \"task_ids\": [\n            3,\n            4\n        ],\n        \"user_ids\": [\n            3\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get all projects w/ partial match search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/projects?name=cool",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"projects"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "cool"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/projects?name=cool",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "cool"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "172"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"ac-yr1vneKbA+PZjIOaBWGiDCufSmI\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 06:57:57 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Super Cool Project\",\n        \"description\": \"Things are a bit too spicy. Spike it down\",\n        \"repository\": \"git://gud.com\",\n        \"manager_id\": 1,\n        \"task_ids\": [\n            1,\n            2\n        ],\n        \"user_ids\": [\n            2\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get all tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tasks",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1080"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"438-pRTR5sjbEJ39uTQJAmq1ljZSXzg\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 06:59:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Flush the sink\",\n        \"details\": \"Sink water is too warm, flushing it should get rid of the thermal mass\",\n        \"priority \": \"low\",\n        \"status\": \"in progress\",\n        \"timeline\": {\n            \"date_assigned\": \"2012-11-01\",\n            \"date_due\": \"2012-11-01\",\n            \"date_updated\": \"2012-11-01\"\n        },\n        \"user_id\": 2,\n        \"project_id\": 1\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Replace Heat Pump Code\",\n        \"details\": \"It's broken, needs replacement code to push heat away.\",\n        \"priority \": \"medium\",\n        \"status\": \"in review\",\n        \"timeline\": {\n            \"date_assigned\": \"2012-11-01\",\n            \"date_due\": \"2012-11-01\",\n            \"date_updated\": \"2012-11-01\"\n        },\n        \"user_id\": 2,\n        \"project_id\": 1\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Fan Doesn't Turn on\",\n        \"details\": \"Core feature regressed! Needs to be hotfixed back to operational\",\n        \"priority \": \"high\",\n        \"status\": \"completed\",\n        \"timeline\": {\n            \"date_assigned\": \"2012-11-01\",\n            \"date_due\": \"2012-11-01\",\n            \"date_updated\": \"2012-11-01\"\n        },\n        \"user_id\": 3,\n        \"project_id\": 2\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Coolant Leaking\",\n        \"details\": \"Pump code is includes a small leak, needs fixing\",\n        \"priority \": \"low\",\n        \"status\": \"assigned\",\n        \"timeline\": {\n            \"date_assigned\": \"2012-11-01\",\n            \"date_due\": \"2012-11-01\",\n            \"date_updated\": \"2012-11-01\"\n        },\n        \"user_id\": 3,\n        \"project_id\": 2\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "430"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1ae-LWn+u+3E8t5JJmMBIcsunBbItdA\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:00:07 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"first_name\": \"Mister\",\n        \"last_name\": \"Boss\",\n        \"title \": \"Owner\",\n        \"manager\": 1,\n        \"active\": true,\n        \"active_project_id\": null,\n        \"project_task_ids\": []\n    },\n    {\n        \"id\": 2,\n        \"first_name\": \"Code\",\n        \"last_name\": \"Monkey\",\n        \"title \": \"SWE I\",\n        \"manager\": 1,\n        \"active\": true,\n        \"active_project_id\": 1,\n        \"project_task_ids\": [\n            1,\n            2\n        ]\n    },\n    {\n        \"id\": 2,\n        \"first_name\": \"the\",\n        \"last_name\": \"specialist\",\n        \"title \": \"Contractor\",\n        \"manager\": 1,\n        \"active\": false,\n        \"active_project_id\": 2,\n        \"project_task_ids\": [\n            3,\n            4\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get all users w/ Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/users?active=false",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "active",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/users?active=false",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "150"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"96-UC99akOLoibWEtAfB+nkiSBwkXo\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:07:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 2,\n        \"first_name\": \"the\",\n        \"last_name\": \"specialist\",\n        \"title \": \"Contractor\",\n        \"manager\": 1,\n        \"active\": false,\n        \"active_project_id\": 2,\n        \"project_task_ids\": [\n            3,\n            4\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get a project by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/projects/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get a project by id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/projects/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "198"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c6-1PY09zRNogkvx1CrMyStuGFjyoI\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 08:44:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"name\": \"Super Cool Project\",\n    \"description\": \"Things are a bit too spicy. Spike it down\",\n    \"repository\": \"git://gud.com\",\n    \"manager_id\": 1,\n    \"task_ids\": [\n        1,\n        2\n    ],\n    \"user_ids\": [\n        2\n    ],\n    \"userCount\": 1,\n    \"taskCount\": 2\n}"
+				},
+				{
+					"name": "Example Failure",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/projects/6",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects",
+								"6"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "32"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"20-OmMYxfihvpHLnOnMn6PLVhyA32w\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:18:47 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get a task by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tasks/6",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks",
+						"6"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks/3",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "275"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"113-7zpOdI/OP440UaQaQsoV3sefjbA\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:18:00 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 3,\n    \"name\": \"Fan Doesn't Turn on\",\n    \"details\": \"Core feature regressed! Needs to be hotfixed back to operational\",\n    \"priority \": \"high\",\n    \"status\": \"completed\",\n    \"timeline\": {\n        \"date_assigned\": \"2012-11-01\",\n        \"date_due\": \"2012-11-01\",\n        \"date_updated\": \"2012-11-01\"\n    },\n    \"user_id\": 3,\n    \"project_id\": 2\n}"
+				},
+				{
+					"name": "Example Failure",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks/6",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"6"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "32"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"20-OmMYxfihvpHLnOnMn6PLVhyA32w\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:18:19 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get a user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/users/5",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"5"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Example success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/users/3",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "148"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"94-0xAH5t66FoBl+NpiG+IqPZG3xkQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:16:12 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 3,\n    \"first_name\": \"the\",\n    \"last_name\": \"specialist\",\n    \"title \": \"Contractor\",\n    \"manager\": 1,\n    \"active\": false,\n    \"active_project_id\": 2,\n    \"project_task_ids\": [\n        3,\n        4\n    ]\n}"
+				},
+				{
+					"name": "Example Failure",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/users/5",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"5"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "32"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"20-OmMYxfihvpHLnOnMn6PLVhyA32w\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 26 Sep 2022 07:19:12 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Add a project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"test\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/projects",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Failed to create project",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"test\":\"test\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/projects",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "34"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"22-LCQPzsXTbsHMpUmWw1IP4GUyhMI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Sep 2022 08:20:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not created\"\n}"
+				},
+				{
+					"name": "Example Create",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"test\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/projects",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "109"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"6d-DWglWRWyCXQ48P0VzVDls7yxmII\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Sep 2022 08:28:23 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"test\",\n    \"description\": null,\n    \"repository\": null,\n    \"manager_id\": null,\n    \"task_ids\": null,\n    \"user_ids\": null,\n    \"id\": 2\n}"
+				},
+				{
+					"name": "Project names must be unique.",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"Super Cool Project\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/projects",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "34"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"22-LCQPzsXTbsHMpUmWw1IP4GUyhMI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Sep 2022 08:30:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not created\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Add a task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"test\", \"status\":\"assigned\", \"priority\":\"low\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/tasks",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create New Task",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"test\", \"status\":\"assigned\", \"priority\":\"low\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "123"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7b-LdlIgH3XFVSxM6104zrOWrhi7xI\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 09:42:19 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"test\",\n    \"details\": null,\n    \"priority\": \"low\",\n    \"status\": \"assigned\",\n    \"timeline\": {\n        \"date_assigned\": null,\n        \"date_due\": null,\n        \"date_updated\": \"9/30/2022\"\n    },\n    \"user_id\": null,\n    \"project_id\": null,\n    \"id\": 5\n}"
+				},
+				{
+					"name": "Bad Request (missing field)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"test\", \"status\":\"assigned\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "25"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"19-VQ5K4nPublC1Arbe2YtLXJgaN0E\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 09:42:57 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"bad request\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Update a project by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Super Cool P3oject\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/projects/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Update an existing Project",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":1, \"name\":\"test\", \"user_ids\":[1,2]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/projects",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "110"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"6e-mZI1krx801g+PNR/2QVI0Ikfm0w\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 07:46:54 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"name\": \"test\",\n    \"description\": null,\n    \"repository\": null,\n    \"manager_id\": null,\n    \"task_ids\": null,\n    \"user_ids\": [\n        1,\n        2\n    ]\n}"
+				},
+				{
+					"name": "Project names must be unique.",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":2, \"name\":\"Super Cool Project\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/projects",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "34"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"22-LCQPzsXTbsHMpUmWw1IP4GUyhMI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Sep 2022 08:30:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Update a task by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/tasks/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Update a task by id",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/tasks/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "184"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b8-hzZefD3NgiXmo0241RNk+JM6Dps\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 10:16:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"test\",\n    \"details\": null,\n    \"priority\": \"low\",\n    \"status\": \"assigned\",\n    \"timeline\": {\n        \"date_assigned\": null,\n        \"date_due\": null,\n        \"date_updated\": \"9/30/2022\"\n    },\n    \"user_id\": null,\n    \"project_id\": null,\n    \"id\": 5\n}"
+				},
+				{
+					"name": "Update a task by id (failure)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/tasks/12",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"12"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "38"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"26-ruokHa/nFZhJTuIK2jgsnru7H9I\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 10:16:58 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"unable to perform update\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Update a user by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"active\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Update a user by id",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "140"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"8c-nE6rSpSS0R6hsyjwMhQUNleb6+A\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 09:02:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"first_name\": \"Mister\",\n    \"last_name\": \"Boss\",\n    \"title \": \"Owner\",\n    \"manager\": 1,\n    \"active\": false,\n    \"active_project_id\": null,\n    \"project_task_ids\": []\n}"
+				},
+				{
+					"name": "Update a user by id (failed)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"10"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "38"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"26-ruokHa/nFZhJTuIK2jgsnru7H9I\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 30 Sep 2022 09:02:30 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"unable to perform update\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete a task by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tasks/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Delete a task with valid ID",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "23"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"17-x2Qv+XZ9m6kC6WgQ5ajpLksV8o8\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Sep 2022 08:43:45 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"1 deleted\"\n}"
+				},
+				{
+					"name": "Example of failture to delete task",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks/10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"10"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "32"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"20-OmMYxfihvpHLnOnMn6PLVhyA32w\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Sep 2022 08:44:15 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"resource not found\"\n}"
+				}
+			]
+		}
+	]
+}
