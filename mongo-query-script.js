@@ -1,5 +1,5 @@
-// Global Dependencies
-const mongoose = require('mongoose');
+// form a DB connection with mongoose
+require('./database');
 
 // Local Dependencies
 const Project = require('./models/project');
@@ -10,11 +10,6 @@ const User = require('./models/user');
 const usersMockData = require('./mock_data/users.json');
 const projectsMockData = require('./mock_data/projects.json');
 const tasksMockData = require('./mock_data/tasks.json');
-
-// Connect to our MongoDB instance using config.json's credentials (Part 2.1)
-const { username, password, dbName } = require('./config.json');
-const uri = `mongodb+srv://${username}:${password}@cluster0.ve805be.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const part2step1 = async () => mongoose.connect(uri);
 
 // Populate the DB with our Mock Data
 const populateDB = async () => {
@@ -126,92 +121,10 @@ const populateDB = async () => {
                 $push: { user_ids: user_id },
             });
     }
+
+    // Done!
+    console.log('Database is Defaulted');
 };
 
-// Populate the DB with our Mock Data
-const part2step2 = async () => {
-    await User.findOne().then((res) => {
-        res = res.toObject({ virtuals: true });
-        // clean up to match assignment details
-        res['_id'] = res['_id'].toString();
-        res['id'] = res['id'].toString();
-        res['position'] = res['title'];
-        delete res['title'];
-        delete res['manager_id'];
-        delete res['task_ids'];
-
-        console.log('User');
-        console.log(res);
-    });
-};
-
-const part2step3 = async () => {
-    await Task.findOne()
-        .then((res) =>
-            res.populate(
-                'project',
-                '-task_ids -user_ids -__v -manager_id -description -repository'
-            )
-        )
-        .then((res) =>
-            res.populate(
-                'user',
-                '-task_ids -title -active -project_id -manager_id'
-            )
-        )
-        .then((res) => {
-            // clean up the object before printing out (to match assignment)
-            res = res.toObject({ virtuals: true });
-            res['_id'] = res['_id'].toString();
-            res['project'] = res['project'][0];
-            res['project']['_id'] = res['project']['_id'].toString();
-            res['user'] = res['user'][0];
-            res['user']['_id'] = res['user']['_id'].toString();
-            delete res['id'];
-            delete res['user_id'];
-            delete res['project_id'];
-            delete res['timeline']['_id'];
-            delete res['timeline']['id'];
-            console.log('Task');
-            console.log(res);
-        });
-};
-
-const part2step4 = async () => {
-    await Project.findOne()
-        .then((res) =>
-            res.populate('manager_id', '-manager_id -project_id -task_ids')
-        )
-        .then((res) =>
-            res.populate(
-                'task_ids',
-                '-task_ids -title -active -manager_id -priority -status -timeline -user_id -__v'
-            )
-        )
-        .then((res) => {
-            // clean up the object before printing out (to match assignment)
-            res = res.toObject({ virtuals: true });
-            res['_id'] = res['_id'].toString();
-            res['manager'] = res['manager_id'];
-            res['manager']['_id'] = res['manager']['_id'].toString();
-            delete res['manager_id'];
-            for (const task of res['task_ids']) {
-                task['project'] = task['project_id'].toString();
-                task['_id'] = task['_id'].toString();
-                delete task['project_id'];
-            }
-            res['user_ids'] = res['user_ids'].map((user_id) =>
-                user_id.toString()
-            );
-
-            console.log('Project');
-            console.log(res);
-        });
-};
-
-part2step1()
-    .then(populateDB)
-    .then(part2step2)
-    .then(part2step3)
-    .then(part2step4)
-    .then(process.exit); // done!
+// Reuse the code from lab 3
+populateDB().then(process.exit); // done!

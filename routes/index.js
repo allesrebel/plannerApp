@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 
 /* GET index listing. */
 router.get('/', function (req, res, next) {

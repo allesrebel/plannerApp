@@ -1,13 +1,7 @@
-// load in mock data to play with
-const appProjectsMockData = require('./mock_data/projects.json');
-const appTasksMockData = require('./mock_data/tasks.json');
-const appUsersMockData = require('./mock_data/users.json');
+// Global Dependencies
+const mongoose = require('mongoose');
 
-const appDatabase = { 
-  'projects': appProjectsMockData,
-  'users': appUsersMockData,
-  'tasks': appTasksMockData
-};
-
-// export this data out to other functions
-module.exports = appDatabase;
+// Connect to our MongoDB instance using config.json's credentials (Part 2.1)
+const { username, password, dbName } = require('./config.json');
+const uri = `mongodb+srv://${username}:${password}@cluster0.ve805be.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+mongoose.connect(uri);
