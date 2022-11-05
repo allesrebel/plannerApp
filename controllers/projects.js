@@ -45,8 +45,7 @@ const getProjectById = async (req, res) => {
             res.json(projectObj);
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'not valid ObjectID given' });
+        res.status(500).json({ message: `${error}` });
     }
 };
 
@@ -177,7 +176,7 @@ const createProject = async (req, res) => {
             res.json(obj);
         }
     } catch (error) {
-        res.status(500).json(error);
+        res.status(500).json({ message: `${error}` });
     }
 };
 
@@ -219,9 +218,7 @@ const updateProject = async (req, res) => {
             res.json(result);
         }
     } catch (error) {
-        res.status(500).json({
-            message: `server error processing request, got ${error}`,
-        });
+        res.status(500).json({ message: `${error}` });
     }
 };
 

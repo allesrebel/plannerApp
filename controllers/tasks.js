@@ -1,4 +1,6 @@
+const ProjectService = require('../services/project');
 const TaskService = require('../services/task');
+const UserService = require('../services/user');
 
 /* GET tasks listing. */
 const getTasks = async (_, res) => {
@@ -21,14 +23,14 @@ const getTaskById = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: 'not valid ObjectID given' });
+        res.status(500).json({ message: `${error}` });
     }
 };
 
 // Validate that the request contains a valid
 // task object (including validation rules)
-// Probably should refactor this, someday
-const validateTask = (req, currentState = null) => {
+// Probably should refactor this from here and project's controller
+const validateTask = async (req, currentState = null) => {
     // request status, while we go through and validate everything
     let validRequest = true;
 
@@ -96,31 +98,25 @@ const validateTask = (req, currentState = null) => {
                 'date_due',
                 'date_updated',
             ];
-            for (const item in expectedKeyValuePairs) {
-                if (!(item in value)) validRequest = false;
-                break;
+
+            for (const item of expectedKeyValuePairs) {
+                // whoa, the in operator almost works like python ;) (minus the whole iterating thing)
+                if (!(item in value)) {
+                    validRequest = false;
+                    break;
+                }
             }
             //TODO: do basic checking of timestamps
         }
 
         if (key === 'user_id' && value !== null) {
-            // validate the ID via emulated db call
-            const userMatches = appDatabase.users.filter((user) => {
-                return user.id === parseInt(value);
-            });
-
-            // we couldn't look up the user, mark request as invalid
-            if (userMatches.length === 0) validRequest = false;
+            if (Boolean(await UserService.getUserById(value)) !== true)
+                validRequest = false;
         }
 
         if (key === 'project_id' && value !== null) {
-            // validate the ID via emulated db call
-            const projectMatches = appDatabase.projects.filter((project) => {
-                return project.id === parseInt(value);
-            });
-
-            // we couldn't look up the project, mark request as invalid
-            if (projectMatches.length === 0) validRequest = false;
+            if (Boolean(await ProjectService.getProjectById(value)) !== true)
+                validRequest = false;
         }
 
         // if we hit an invalid request early, we can exit early
@@ -159,6 +155,12 @@ const validateTask = (req, currentState = null) => {
         return Object.assign(newRow, extractedItem);
     }, {});
 
+    // strip out NULL values that shouldn't be in the object (minus timeline)
+    Object.keys(cleanObj).forEach((key) => {
+        if (cleanObj[key] === null || cleanObj[key] === undefined)
+            delete cleanObj[key]; // strip it
+    });
+
     // add in timeline if it's null
     if (cleanObj.timeline === null)
         cleanObj.timeline = {
@@ -173,25 +175,23 @@ const validateTask = (req, currentState = null) => {
 /* POST task - create a task */
 const createTask = async (req, res) => {
     // Make sure the parameters of the new object are all valid
-    const { validRequest, cleanObj } = validateTask(req);
+    const { validRequest, cleanObj } = await validateTask(req);
 
-    // attempt to insert into database
-    // simulate by adding 1 to largest mock id, always successful!
-    const largestId = appDatabase.tasks.reduce((acc, task) => {
-        return Math.max(acc, task.id);
-    }, 0);
-    cleanObj.id = largestId + 1;
-
-    // based on request status, return error or success w/ new item index
-    if (validRequest === false) {
-        // invalid request, (name issue or bad input)
-        res.status(400).json({ message: 'bad request' });
-    } else {
-        // we got something valid from DB, assuming could insert, got new id
-        // we'll adjust the timestamp of the
-        cleanObj.timeline.date_updated = new Date().toLocaleDateString();
-        appDatabase.tasks.push(cleanObj);
-        res.json(cleanObj);
+    // attempt to insert into database if the request looks good
+    try {
+        // based on request status, return error or success w/ new item index
+        if (!validRequest) {
+            // invalid request, (name issue or bad input)
+            res.status(400).json({ message: 'bad request' });
+        } else {
+            // we got something valid from DB, assuming could insert, got new id
+            // we'll adjust the timestamp of the
+            cleanObj.timeline.date_updated = new Date().toLocaleDateString();
+            const result = await TaskService.createTask(cleanObj);
+            res.json(result);
+        }
+    } catch (error) {
+        res.status(500).json({ message: `${error}` });
     }
 };
 
@@ -203,60 +203,69 @@ const updateTask = async (req, res) => {
     let validRequest = true;
 
     // check id can be parsed at all
-    if (isNaN(parseInt(req.params.id)) === true) validRequest = false;
+    if (!req.params.id) validRequest = false;
 
     // check if we have an entry for this id
-    // simulate a DB lookup via id w/ search
-    const idSearchResults = appDatabase.tasks.filter((task) => {
-        return task.id === parseInt(req.params.id);
-    });
+    const taskObj = await TaskService.getTaskById(req.params.id);
 
     // doesn't exist!
-    if (idSearchResults.length !== 1) {
-        // does not exist in the DB (or bad input)
+    if (!taskObj) {
         validRequest = false;
     }
 
     // finally validate the transaction (assuming task didn't exist in db)
     // we'll simulate, because we're mocking a DB, we could also adjust validation
     // to include a different set of fields instead
-    const results = validateTask(req, idSearchResults[0]);
-    if (results.validRequest !== true) validRequest = false;
+    const results = await validateTask(req, taskObj);
+    if (!results.validRequest) validRequest = false;
     const cleanObj = results.cleanObj;
 
-    if (validRequest !== true) {
-        // perform the update (always success in this mock)
-        // does not exist in the DB (or bad input)
-        res.status(400).json({ message: 'unable to perform update' });
-    } else {
-        // we got something valid from DB
-        // we'll simulate an update by directly applying only the changed fields
-        const taskIndex = appDatabase.tasks.indexOf(idSearchResults[0]);
-        for (const [key, value] of Object.entries(cleanObj)) {
-            if (value !== null) appDatabase.tasks.at(taskIndex)[key] = value;
+    try {
+        if (!validRequest) {
+            // does not exist in the DB (or bad input)
+            res.status(400).json({ message: 'unable to perform update' });
+        } else {
+            // Attempt to do the update in the DB (ensures only valid fields are updated)
+            for (const [key, value] of Object.entries(cleanObj)) {
+                if (value !== null) taskObj[key] = value;
+            }
+            // finally update the timestamp
+            taskObj.timeline.date_updated = new Date().toLocaleDateString();
+            // do the update!
+            const result = await taskObj.save();
+            res.json(result);
         }
-        // finally update the timestamp
-        appDatabase.tasks.at(taskIndex).timeline.date_updated =
-            new Date().toLocaleDateString();
-        res.json(appDatabase.tasks.at(taskIndex));
+    } catch (error) {
+        res.status(500).json({ message: `${error}` });
     }
 };
 
 /* DELETE task - delete a task by ID */
 const deleteTask = async (req, res) => {
-    // simulate a look up by ID
-    const taskMatches = appDatabase.tasks.filter((task) => {
-        return task.id === parseInt(req.params.id);
-    });
+    // keep track of the request as we go
+    let validRequest = true;
 
-    // we couldn't look up the id
-    if (taskMatches.length === 0) {
-        // invalid request, (name issue or bad input)
-        res.status(500).json({ message: 'resource not found' });
-    } else {
-        // we got something valid from DB, assuming could delete
-        delete appDatabase.tasks[appDatabase.tasks.indexOf(taskMatches[0])];
-        res.json({ message: `task ${req.params.id} deleted` });
+    // check id can be parsed at all
+    if (!req.params.id) validRequest = false;
+
+    try {
+        // check if we have an entry for this id
+        const taskObj = await TaskService.getTaskById(req.params.id);
+
+        // doesn't exist!
+        if (!taskObj) {
+            validRequest = false;
+        }
+
+        // Delete away if we're valid
+        if (validRequest) {
+            await taskObj.delete();
+            res.json({ message: `task ${req.params.id} deleted` });
+        } else {
+            res.status(400).json({ message: 'invalid request' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: `${error}` });
     }
 };
 
