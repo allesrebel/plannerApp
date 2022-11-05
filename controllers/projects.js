@@ -24,11 +24,23 @@ const getProjects = async (req, res) => {
     }
 };
 
-/* GET project by id. */
+/* GET project by id. 
+    Here's where we'll implement the logic specified by the assignment:
+    There should be field which represents the manager of project
+        + It should include the manager's _id, first, last, isActive, etc
+    There should be a field represents all the tasks associated to the project
+        + It should only include the _id of the task[,] name, and detail of the task (not the timeline object)
+        was task name should be included too (typo? i think there's supposed to be',' 
+        plus it  seems odd to have details but not task name)
+*/
 const getProjectById = async (req, res) => {
     try {
         const requestedId = req.params.id;
-        const project = await ProjectService.getProjectById(requestedId);
+        const project = await ProjectService.getProjectById(requestedId, [
+            ['user_ids', ''], // required to produce user count, we'll do same as manager
+            ['task_ids', '-timeline -status -priority -user_id -__v'],
+            ['manager_id', ''],
+        ]);
         // send the matched item if found in DB
         if (!project) {
             // does not exist in the DB (or bad input)
@@ -36,10 +48,21 @@ const getProjectById = async (req, res) => {
         } else {
             // we got something valid from DB! convert into object
             const projectObj = project.toObject();
-            // before giving result to user
+
+            // clean up task_ids, removing the project_id field
+            projectObj.tasks = [];
+            for (const taskModelObj of project.task_ids) {
+                const taskObj = taskModelObj.toObject();
+                delete taskObj.project_id;
+                projectObj.tasks.push(taskObj);
+            }
+
             // add count of user_ids and task_ids as requested by assignment (for this request only)
+            // this was required in HW1, wasn't sure to keep or not
             const taskCount = projectObj.task_ids.length;
             const userCount = projectObj.user_ids.length;
+            delete projectObj.task_ids;
+            delete projectObj.user_ids;
             projectObj.userCount = userCount;
             projectObj.taskCount = taskCount;
             res.json(projectObj);

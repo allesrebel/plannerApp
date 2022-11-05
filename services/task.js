@@ -10,7 +10,8 @@ const _canUpdateTask = async (id) => {
 
 const getAllTasks = async () => await SharedService.all(Task);
 
-const getTaskById = async (id) => await SharedService.get(Task, id);
+const getTaskById = async (id, populate_details = []) =>
+    await SharedService.get(Task, id, populate_details);
 
 const createTask = async (body) => await SharedService.create(Task, body);
 

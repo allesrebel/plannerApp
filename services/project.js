@@ -1,11 +1,10 @@
 const Project = require('../models/project');
 const SharedService = require('./shared');
 
-const getAllProjects = async () =>
-    await SharedService.all(Project, ['user_ids', 'task_ids']);
+const getAllProjects = async () => await SharedService.all(Project);
 
-const getProjectById = async (id) =>
-    await SharedService.get(Project, id, ['user_ids', 'task_ids']);
+const getProjectById = async (id, populate_details = []) =>
+    await SharedService.get(Project, id, populate_details);
 
 const findProject = async (obj) => await Project.findOne(obj);
 

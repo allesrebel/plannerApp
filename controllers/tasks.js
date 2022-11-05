@@ -7,11 +7,19 @@ const getTasks = async (_, res) => {
     res.json(await TaskService.getAllTasks());
 };
 
-/* GET task by id. */
+/* GET task by id. 
+    There should be field which represents the user assigned to the task
+        It should include the user's _id, first, last, isActive, etc
+    There should be a field represents the project the task is associated to
+        It should only include the _id of the project and name of the project
+*/
 const getTaskById = async (req, res) => {
     try {
         const requestedId = req.params.id;
-        const task = await TaskService.getTaskById(requestedId);
+        const task = await TaskService.getTaskById(requestedId, [
+            ['user_id', ''],
+            ['project_id', '-description -repository -manager_id'],
+        ]);
         // send the matched item if found in DB
         if (!task) {
             // does not exist in the DB (or bad input)
