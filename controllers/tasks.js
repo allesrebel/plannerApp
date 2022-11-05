@@ -1,33 +1,33 @@
 const TaskService = require('../services/task');
 
 /* GET tasks listing. */
-const getTasks = async (req, res) => {
-    // note we will filter out nulls, due to our mock DB implementation
-    const filtered = appDatabase.tasks.filter((element) => element !== null);
-    res.json(filtered);
+const getTasks = async (_, res) => {
+    res.json(await TaskService.getAllTasks());
 };
 
 /* GET task by id. */
 const getTaskById = async (req, res) => {
-    // emulate check if database has the task via search
-    const requestedId = parseInt(req.params.id);
-    const searchResults = appDatabase.tasks.filter((task) => {
-        return task.id === requestedId;
-    });
-
-    // send the matched item if found in DB
-    if (searchResults.length !== 1) {
-        // does not exist in the DB (or bad input)
-        res.status(404).json({ message: 'resource not found' });
-    } else {
-        // we got something valid from DB
-        res.json(searchResults.at(0));
+    try {
+        const requestedId = req.params.id;
+        const task = await TaskService.getTaskById(requestedId);
+        // send the matched item if found in DB
+        if (!task) {
+            // does not exist in the DB (or bad input)
+            res.status(404).json({ message: 'resource not found' });
+        } else {
+            // we got something valid from DB! convert into object
+            const TaskObj = task.toObject();
+            res.json(TaskObj);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'not valid ObjectID given' });
     }
 };
 
 // Validate that the request contains a valid
 // task object (including validation rules)
-//
+// Probably should refactor this, someday
 const validateTask = (req, currentState = null) => {
     // request status, while we go through and validate everything
     let validRequest = true;

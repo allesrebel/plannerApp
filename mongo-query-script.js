@@ -1,3 +1,7 @@
+// Updated, earlier every relationship was made, even the redundant ones
+// Instead, this only considers links that are unique between collections
+// thank you for point that out!
+
 // form a DB connection with mongoose
 require('./database');
 
@@ -53,7 +57,6 @@ const populateDB = async () => {
 
     // now we can finally make tasks and associate them with the correct project
     // and correct users
-    const listOfUserUpdates = {};
     for (const taskMock of tasksMockData) {
         const keepKeys = ['name', 'details', 'priority', 'status'];
         const task = Object.fromEntries(
@@ -89,37 +92,12 @@ const populateDB = async () => {
         });
         task['user_id'] = userObj._id;
 
-        const taskObj = await Task.create(task);
-
-        // record user that we'll want to eventually add to this Project
-        if (listOfUserUpdates[projectObj._id] == null)
-            listOfUserUpdates[projectObj._id] = [];
-        listOfUserUpdates[projectObj._id].push(userObj._id);
-
-        // finalize the relationships across, project and user
-        await projectObj.updateOne({
-            $push: { task_ids: taskObj._id },
-        });
+        await Task.create(task);
 
         await userObj.updateOne({
-            $push: { task_ids: taskObj._id },
+            //$push: { task_ids: taskObj._id },
             $set: { project_id: projectObj._id },
         });
-    }
-
-    // finally post process the listOfUserUpdates object to remove duplicates
-    for (const [project_id, user_ids] of Object.entries(listOfUserUpdates)) {
-        // Remove duplicates by converting idObjects to strings
-        const ids = user_ids.map((idObject) => idObject.toString());
-        const unique_user_ids = user_ids.filter(
-            // search, includes can use an offset to start from a different position
-            (obj, offset) => !ids.includes(obj.toString(), offset + 1)
-        );
-
-        for (const user_id of unique_user_ids)
-            await Project.findByIdAndUpdate(project_id, {
-                $push: { user_ids: user_id },
-            });
     }
 
     // Done!

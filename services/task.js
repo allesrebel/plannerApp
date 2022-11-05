@@ -1,6 +1,5 @@
-const Task = require('../models/task');
-
 const SharedService = require('./shared');
+const Task = require('../models/task');
 
 // shared method for checking time
 const _canUpdateTask = async (id) => {

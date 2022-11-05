@@ -1,4 +1,6 @@
 const ProjectService = require('../services/project');
+const TaskService = require('../services/task');
+const UserService = require('../services/user');
 
 /* GET all projects listing w/ partial match search */
 const getProjects = async (req, res) => {
@@ -24,8 +26,8 @@ const getProjects = async (req, res) => {
 
 /* GET project by id. */
 const getProjectById = async (req, res) => {
-    const requestedId = req.params.id;
     try {
+        const requestedId = req.params.id;
         const project = await ProjectService.getProjectById(requestedId);
         // send the matched item if found in DB
         if (!project) {
@@ -48,7 +50,33 @@ const getProjectById = async (req, res) => {
     }
 };
 
-const validateProject = (req) => {
+const setValidationAndExists = async (Service, ids) => {
+    var uniqueSetAndAllExist = true;
+
+    // validate the IDs, make sure the set of ids is valid
+    const matchedTaskIds = new Set();
+
+    for (const id of ids) {
+        // simulate a look up
+        const lookupViaService = Boolean(await Service.getTaskById(id));
+
+        // if we have any missing IDs, already invalid
+        if (lookupViaService === false) {
+            uniqueSetAndAllExist = false;
+            break;
+        }
+
+        // add to set of matched IDs
+        matchedTaskIds.add(id);
+    }
+
+    // check if set length === size of ids (else input malformed)
+    if (ids.length !== matchedTaskIds.length) uniqueSetAndAllExist = false;
+
+    return uniqueSetAndAllExist;
+};
+
+const validateProject = async (req, bypass_required_fields = false) => {
     // request status, while we go through and validate everything
     let validRequest = true;
 
@@ -79,123 +107,77 @@ const validateProject = (req) => {
     });
 
     // This is where we would check if all the items are here & valid
-    for (const item of extractedItems) {
+    for await (const item of extractedItems) {
+        // early break if we've already failed some validation
+        if (validRequest === false) break;
+
         // check for required fields!
         // for now, the only required fields is name
         const [key, value] = Object.entries(item)[0];
-        if (key === 'name' && value === null) validRequest = false;
+        if (
+            key === 'name' &&
+            value === null &&
+            bypass_required_fields === false
+        )
+            validRequest = false;
 
-        // validate fields!
-        // perform validation on ids, if they exist
-        if (key === 'name' && value !== null) {
-            // check if name exists at all in db
-            // simulating w/ search
-            const projectNameMatches = appDatabase.projects.filter(
-                (project) => {
-                    return project.name === value;
-                }
-            );
-            if (projectNameMatches.length !== 0) validRequest = false;
+        // validate across all the fields!
+        if (
+            key === 'name' &&
+            value !== null &&
+            bypass_required_fields === false
+        ) {
+            // check if name exists at all in DB, name is required to be unique
+            if (!(await ProjectService.findProject({ name: value })) === true)
+                // we matched on an existing project, so we're not unique!
+                validRequest = false;
         }
 
         if (key === 'manager_id' && value !== null) {
-            // validate the ID via emulated db call
-            const userMatches = appDatabase.users.filter((user) => {
-                return user.id === parseInt(value);
-            });
-
-            // we couldn't look up the manager, mark request as invalid
-            if (userMatches.length === 0) validRequest = false;
+            if (Boolean(await UserService.getUserById(value)) !== true)
+                validRequest = false;
         }
 
-        // perform validation on ids, if they exist
         if (key === 'task_ids' && value !== null) {
-            // validate the IDs, make sure the set of ids is valid
-            const matchedTaskIds = new Set();
-
-            // rename value to something human readable
-            const ids = value;
-
-            for (const id of ids) {
-                // cast to int
-                const parsedId = parseInt(id);
-
-                // simulate a look up
-                const taskMatches = appDatabase.tasks.filter((task) => {
-                    return task.id === parsedId;
-                });
-                // if we have any missing IDs, already invalid
-                if (taskMatches.length === 0) {
-                    validRequest = false;
-                    break;
-                }
-                // add to set of matched IDs
-                matchedTaskIds.add(taskMatches[0].id);
-            }
-
-            // check if set length === size of ids (else input malformed)
-            if (ids.length !== matchedTaskIds.length) validRequest = false;
+            if ((await setValidationAndExists(TaskService, value)) !== true)
+                validRequest = false;
         }
 
         // perform validation on ids, if they exist
         if (key === 'user_ids' && value !== null) {
-            // validate the IDs, make sure the set of ids is valid
-            const matchedUserIds = new Set();
-
-            // rename value to something human readable
-            const ids = value;
-
-            for (const id of ids) {
-                // cast to int
-                const parsedId = parseInt(id);
-
-                // simulate a look up
-                const userMatches = appDatabase.users.filter((user) => {
-                    return user.id === parsedId;
-                });
-                // if we have any missing IDs, already invalid
-                if (userMatches.length === 0) {
-                    validRequest = false;
-                    break;
-                }
-                // add to set of matched IDs
-                matchedUserIds.add(userMatches[0].id);
-            }
-
-            // check if set length === size of ids (else input malformed)
-            if (ids.length !== matchedUserIds.size) validRequest = false;
+            if ((await setValidationAndExists(UserService, value)) !== true)
+                validRequest = false;
         }
-
-        // if we hit an invalid request early, we can exit early
-        if (validRequest === false) break;
     }
 
     const cleanObj = extractedItems.reduce((newRow, extractedItem) => {
         return Object.assign(newRow, extractedItem);
     }, {});
+
+    // strip out NULL values that shouldn't be in the object
+    Object.keys(cleanObj).forEach((key) => {
+        if (cleanObj[key] === null || cleanObj[key] === undefined)
+            delete cleanObj[key]; // strip it
+    });
+
     return { validRequest, cleanObj };
 };
 
 /* POST project - create a project if unique name */
 const createProject = async (req, res) => {
     // Make sure the parameters of the new object are all valid
-    const { validRequest, cleanObj } = validateProject(req);
+    const { validRequest, cleanObj } = await validateProject(req);
 
     // attempt to insert into database
-    // simulate by adding 1 to largest mock id, always successful!
-    const largestId = appDatabase.projects.reduce((acc, project) => {
-        return Math.max(acc, project.id);
-    }, 0);
-    cleanObj.id = largestId + 1;
-
-    // based on request status, return error or success w/ new item index
-    if (validRequest === false) {
-        // invalid request, (name issue or bad input)
-        res.status(400).json({ message: 'bad request' });
-    } else {
-        // we got something valid from DB, assuming could insert, got new id
-        appDatabase.projects.push(cleanObj);
-        res.json(cleanObj);
+    try {
+        if (!validRequest)
+            res.status(400).json({ message: 'error validating body' });
+        else {
+            const obj = await ProjectService.createProject(cleanObj);
+            res.json(obj);
+        }
+    } catch (error) {
+        res.status(500).json(error);
     }
 };
 
@@ -205,55 +187,41 @@ const updateProject = async (req, res) => {
     let validRequest = true;
 
     // check id can be parsed at all
-    if (isNaN(parseInt(req.params.id)) === true) validRequest = false;
+    if (!req.params.id) validRequest = false;
 
-    // validate name exists
-    if (req.body.name === null) validRequest = false;
+    // validate name exists (required field), but instead of checking
+    // for uniquiness, we'll have the DB inforce this via index (if we find an obj)
+    if (!req.body.name) validRequest = false;
 
     // check if we have an entry for this id
-    // simulate a DB lookup via id w/ search
-    const idSearchResults = appDatabase.projects.filter((project) => {
-        return project.id === parseInt(req.params.id);
-    });
+    const projectObj = await ProjectService.getProjectById(req.params.id);
 
-    // doesn't exist!
-    if (idSearchResults.length !== 1) {
+    // did we actually find a project with this ID?
+    if (!projectObj) {
         // does not exist in the DB (or bad input)
         validRequest = false;
-    } else {
-        //Does exist!
-
-        // check for unique name, only if req.body has different
-        if (req.body.name !== idSearchResults[0].name) {
-            // simulate a DB lookup via id w/ search
-            const searchResults = appDatabase.projects.filter((project) => {
-                return project.name === req.body.name;
-            });
-
-            if (searchResults.length !== 0) validRequest = false;
-        }
     }
 
-    // finally validate the transaction (assuming project didn't exist in db)
-    // we'll simulate, because we're mocking a DB, we could also adjust validation
-    // to include a different set of fields instead
-    delete appDatabase.projects[
-        appDatabase.projects.indexOf(idSearchResults[0])
-    ];
-    const results = validateProject(req);
-    if (results.validRequest !== true) validRequest = false;
+    // finally validate the transaction (everything else in body)
+    const results = await validateProject(req, true);
+    // Were the rest of the properties okay? (users, tasks, etc via validation)
+    if (!results.validRequest) validRequest = false;
+    // Grab the final updated project
     const cleanObj = results.cleanObj;
 
-    if (validRequest !== true) {
-        // perform the update (always success in this mock)
-        // does not exist in the DB (or bad input)
-        res.status(404).json({ message: 'resource not found' });
-    } else {
-        // we got something valid from DB (Assume we had a transaction for all this)
-        const newObj = Object.assign(idSearchResults[0], cleanObj);
-        // and place back into array for fun (into DB)
-        appDatabase.projects.push(newObj);
-        res.json(newObj);
+    try {
+        if (!validRequest) {
+            // does not exist in the DB (or bad input)
+            res.status(400).json({ message: 'failed to validate request' });
+        } else {
+            //  let's try an update, we're good to go
+            const result = await projectObj.updateOne(cleanObj);
+            res.json(result);
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: `server error processing request, got ${error}`,
+        });
     }
 };
 

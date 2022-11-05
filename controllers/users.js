@@ -29,8 +29,8 @@ const getUsers = async (req, res) => {
 
 /* GET user by id. */
 const getUserById = async (req, res) => {
-    const requestedId = req.params.id;
     try {
+        const requestedId = req.params.id;
         const user = await UserService.getUserById(requestedId);
         // send the matched item if found in DB
         if (!user) {
@@ -38,7 +38,7 @@ const getUserById = async (req, res) => {
             res.status(404).json({ message: 'resource not found' });
         } else {
             // we got something valid from DB! convert into object
-            const userObj = User.toObject();
+            const userObj = user.toObject();
             res.json(userObj);
         }
     } catch (error) {
@@ -48,15 +48,14 @@ const getUserById = async (req, res) => {
 };
 
 /* PUT user - update a user by id 
-    A user (name, detail and timeline object) is only able to be updated as long as the status is "assigned".  Status can always be updated.
+   Only allow active status changes, otherwise reject changes
 */
 const updateUser = async (req, res) => {
     // keep track of the request as we go
     let validRequest = true;
 
     // check if we have an entry for this id
-    // simulate a DB lookup via id w/ search
-    const user = UserService.getUserById(validRequest);
+    const user = await UserService.getUserById(req.params.id);
 
     // doesn't exist!
     if (!user) {
@@ -73,9 +72,10 @@ const updateUser = async (req, res) => {
         res.status(400).json({ message: 'unable to perform update' });
     } else {
         // we got something valid from DB, perform update
-        const indexOfUser = appDatabase.users.indexOf(user[0]);
-        appDatabase.users.at(indexOfUser).active = req.body.active;
-        res.json(appDatabase.users.at(indexOfUser));
+        const result = await user.updateOne({
+            $set: { active: req.body.active },
+        });
+        res.json(result);
     }
 };
 

@@ -1,3 +1,4 @@
+const SharedService = require('./shared');
 const User = require('../models/user');
 
 const getAllUsers = async () => await SharedService.all(User);
