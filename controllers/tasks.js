@@ -141,7 +141,7 @@ const validateTask = async (req, currentState = null) => {
         currentState.status !== 'assigned'
     ) {
         // check extracted properties to see if user requested changes in any of these
-        const invalidproperties = [
+        const invalidProperties = [
             //'id', // assigned by db
             'name',
             'details',
@@ -154,7 +154,7 @@ const validateTask = async (req, currentState = null) => {
         for (const item of extractedItems) {
             const [key, value] = Object.entries(item)[0];
 
-            if (key in invalidproperties && value !== null) {
+            if (invalidProperties.includes(key) && value !== null) {
                 validRequest = false;
                 break;
             }
