@@ -63,19 +63,22 @@ const updateUser = async (req, res) => {
         validRequest = false;
     }
 
-    // the only field that can be updated via API is active, ignore other fields
+    // the only property that can be updated via API is active, ignore other property
     if (req.body.active === null) validRequest = false;
 
-    if (validRequest !== true) {
-        // perform the update (always success in this mock)
-        // does not exist in the DB (or bad input)
-        res.status(400).json({ message: 'unable to perform update' });
-    } else {
-        // we got something valid from DB, perform update
-        const result = await user.updateOne({
-            $set: { active: req.body.active },
-        });
-        res.json(result);
+    try {
+        if (validRequest !== true) {
+            // perform the update (always success in this mock)
+            // does not exist in the DB (or bad input)
+            res.status(400).json({ message: 'unable to perform update' });
+        } else {
+            // we got something valid from DB, perform update
+            user.active = req.body.active;
+            const result = await user.save();
+            res.json(result);
+        }
+    } catch (error) {
+        res.status(500).json({ message: `${error}` });
     }
 };
 

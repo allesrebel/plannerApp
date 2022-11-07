@@ -169,7 +169,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Super Cool test\",\r\n    \"manager_id\": \"6366186ed3ccb815ade629a7\",\r\n    \"description\": \"the coolest test\",\r\n    \"repository\": \"aweeeeeesome.com\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Super Cool test12334\",\r\n    \"manager_id\": \"6366186ed3ccb815ade629a7\",\r\n    \"description\": \"the coolest test\",\r\n    \"repository\": \"aweeeeeesome.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -506,7 +506,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"name\":\"Super Cool P3owjecaefgt\"}",
+					"raw": "{\"name\":\"Super Cool P3owjeca33333efgt\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -877,14 +877,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/tasks/63662dd77e62686f0f730061",
+					"raw": "localhost:3000/tasks/6366186fd3ccb815ade629b8",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"tasks",
-						"63662dd77e62686f0f730061"
+						"6366186fd3ccb815ade629b8"
 					]
 				}
 			},
@@ -1004,7 +1004,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"status\":\"in progress\"\r\n}",
+					"raw": "{\r\n    \"status\":\"assigned\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

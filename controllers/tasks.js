@@ -8,9 +8,9 @@ const getTasks = async (_, res) => {
 };
 
 /* GET task by id. 
-    There should be field which represents the user assigned to the task
+    There should be property which represents the user assigned to the task
         It should include the user's _id, first, last, isActive, etc
-    There should be a field represents the project the task is associated to
+    There should be a property represents the project the task is associated to
         It should only include the _id of the project and name of the project
 */
 const getTaskById = async (req, res) => {
@@ -45,8 +45,8 @@ const validateTask = async (req, currentState = null) => {
     // validate that we actually have a request
     if (Object.keys(req.body).length === 0) validRequest = false;
 
-    // validate the body of the request, + strip out un-needed fields
-    const fields = [
+    // validate the body of the request, + strip out un-needed properties
+    const properties = [
         //'id', // assigned by db
         'name',
         'details',
@@ -59,20 +59,22 @@ const validateTask = async (req, currentState = null) => {
     const reqObj = req.body;
 
     // create a map of the keys that we only want (dropping everything else)
-    const extractedItems = fields.map((field) => {
+    const extractedItems = properties.map((property) => {
         const newObj = {};
-        if (reqObj.hasOwnProperty(field)) {
-            newObj[field] = reqObj[field];
+        // does our request object have the required property?
+        // if so, replace the new object's value from the request object
+        if (property in reqObj) {
+            newObj[property] = reqObj[property];
         } else {
-            newObj[field] = null;
+            newObj[property] = null;
         }
         return newObj;
     });
 
     // This is where we would check if all the items are here & valid
     for (const item of extractedItems) {
-        // check for required fields!
-        // for now, the only required fields is name, let user do updates to fill everything else out
+        // check for required properties!
+        // for now, the only required properties is name, let user do updates to fill everything else out
         const [key, value] = Object.entries(item)[0];
         // note, we only check for existence IF we don't a current state saved in the DB
         if (currentState === null) {
@@ -81,7 +83,7 @@ const validateTask = async (req, currentState = null) => {
             if (key === 'priority' && value === null) validRequest = false;
         }
 
-        // validate fields passed in
+        // validate properties passed in
 
         // perform validation on priority
         if (key === 'priority' && value !== null) {
@@ -101,20 +103,21 @@ const validateTask = async (req, currentState = null) => {
 
         // perform validation on timeline
         if (key === 'timeline' && value !== null) {
-            const expectedKeyValuePairs = [
+            // Note: value is actually a full on Javascript Object, with properties and values
+            const timelineObj = value;
+            const expectedProperties = [
                 'date_assigned',
                 'date_due',
                 'date_updated',
             ];
 
-            for (const item of expectedKeyValuePairs) {
+            for (const property of expectedProperties) {
                 // whoa, the in operator almost works like python ;) (minus the whole iterating thing)
-                if (!(item in value)) {
+                if (!(property in timelineObj)) {
                     validRequest = false;
                     break;
                 }
             }
-            //TODO: do basic checking of timestamps
         }
 
         if (key === 'user_id' && value !== null) {
@@ -137,8 +140,8 @@ const validateTask = async (req, currentState = null) => {
         currentState !== null &&
         currentState.status !== 'assigned'
     ) {
-        // check extracted fields to see if user requested changes in any of these
-        const invalidFields = [
+        // check extracted properties to see if user requested changes in any of these
+        const invalidproperties = [
             //'id', // assigned by db
             'name',
             'details',
@@ -151,7 +154,7 @@ const validateTask = async (req, currentState = null) => {
         for (const item of extractedItems) {
             const [key, value] = Object.entries(item)[0];
 
-            if (key in invalidFields && value !== null) {
+            if (key in invalidproperties && value !== null) {
                 validRequest = false;
                 break;
             }
@@ -223,7 +226,7 @@ const updateTask = async (req, res) => {
 
     // finally validate the transaction (assuming task didn't exist in db)
     // we'll simulate, because we're mocking a DB, we could also adjust validation
-    // to include a different set of fields instead
+    // to include a different set of properties instead
     const results = await validateTask(req, taskObj);
     if (!results.validRequest) validRequest = false;
     const cleanObj = results.cleanObj;
@@ -233,7 +236,7 @@ const updateTask = async (req, res) => {
             // does not exist in the DB (or bad input)
             res.status(400).json({ message: 'unable to perform update' });
         } else {
-            // Attempt to do the update in the DB (ensures only valid fields are updated)
+            // Attempt to do the update in the DB (ensures only valid properties are updated)
             for (const [key, value] of Object.entries(cleanObj)) {
                 if (value !== null) taskObj[key] = value;
             }

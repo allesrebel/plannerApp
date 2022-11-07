@@ -26,9 +26,9 @@ const getProjects = async (req, res) => {
 
 /* GET project by id. 
     Here's where we'll implement the logic specified by the assignment:
-    There should be field which represents the manager of project
+    There should be property which represents the manager of project
         + It should include the manager's _id, first, last, isActive, etc
-    There should be a field represents all the tasks associated to the project
+    There should be a property represents all the tasks associated to the project
         + It should only include the _id of the task[,] name, and detail of the task (not the timeline object)
         was task name should be included too (typo? i think there's supposed to be',' 
         plus it  seems odd to have details but not task name)
@@ -49,7 +49,7 @@ const getProjectById = async (req, res) => {
             // we got something valid from DB! convert into object
             const projectObj = project.toObject();
 
-            // clean up task_ids, removing the project_id field
+            // clean up task_ids, removing the project_id property
             projectObj.tasks = [];
             for (const taskModelObj of project.task_ids) {
                 const taskObj = taskModelObj.toObject();
@@ -98,15 +98,15 @@ const setValidationAndExists = async (Service, ids) => {
     return uniqueSetAndAllExist;
 };
 
-const validateProject = async (req, bypass_required_fields = false) => {
+const validateProject = async (req, bypass_required_properties = false) => {
     // request status, while we go through and validate everything
     let validRequest = true;
 
     // validate that we actually have a request
     if (Object.keys(req.body).length === 0) validRequest = false;
 
-    // validate the body of the request, + strip out un-needed fields
-    const fields = [
+    // validate the body of the request, + strip out un-needed properties
+    const properties = [
         // 'id', gets assigned by 'database'
         'name',
         'description',
@@ -118,12 +118,14 @@ const validateProject = async (req, bypass_required_fields = false) => {
     const reqObj = req.body;
 
     // create a map of the keys that we only want (dropping everything else)
-    const extractedItems = fields.map((field) => {
+    const extractedItems = properties.map((property) => {
         const newObj = {};
-        if (reqObj.hasOwnProperty(field)) {
-            newObj[field] = reqObj[field];
+        // does our request object have the required property?
+        // if so, replace the new object's value from the request object
+        if (property in reqObj) {
+            newObj[property] = reqObj[property];
         } else {
-            newObj[field] = null;
+            newObj[property] = null;
         }
         return newObj;
     });
@@ -133,24 +135,24 @@ const validateProject = async (req, bypass_required_fields = false) => {
         // early break if we've already failed some validation
         if (validRequest === false) break;
 
-        // check for required fields!
-        // for now, the only required fields is name
+        // check for required properties!
+        // for now, the only required properties is name
         const [key, value] = Object.entries(item)[0];
         if (
             key === 'name' &&
             value === null &&
-            bypass_required_fields === false
+            bypass_required_properties === false
         )
             validRequest = false;
 
-        // validate across all the fields!
+        // validate across all the properties!
         if (
             key === 'name' &&
             value !== null &&
-            bypass_required_fields === false
+            bypass_required_properties === false
         ) {
             // check if name exists at all in DB, name is required to be unique
-            if (!(await ProjectService.findProject({ name: value })) === true)
+            if (await ProjectService.findProject({ name: value }))
                 // we matched on an existing project, so we're not unique!
                 validRequest = false;
         }
@@ -211,7 +213,7 @@ const updateProject = async (req, res) => {
     // check id can be parsed at all
     if (!req.params.id) validRequest = false;
 
-    // validate name exists (required field), but instead of checking
+    // validate name exists (required property), but instead of checking
     // for uniquiness, we'll have the DB inforce this via index (if we find an obj)
     if (!req.body.name) validRequest = false;
 
@@ -236,8 +238,11 @@ const updateProject = async (req, res) => {
             // does not exist in the DB (or bad input)
             res.status(400).json({ message: 'failed to validate request' });
         } else {
-            //  let's try an update, we're good to go
-            const result = await projectObj.updateOne(cleanObj);
+            // Attempt to do the update in the DB (ensures only valid properties are updated)
+            for (const [key, value] of Object.entries(cleanObj)) {
+                if (value !== null) projectObj[key] = value;
+            }
+            const result = await projectObj.save();
             res.json(result);
         }
     } catch (error) {
