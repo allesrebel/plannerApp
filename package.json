@@ -5,7 +5,7 @@
     "main": "node ./bin/www",
     "scripts": {
         "start": "node ./bin/www",
-        "setup_db": "node mongo-query-script.js",
+        "setup_db": "node ./bin/mongo-query-script.js",
         "dev-server": "npx nodemon ./bin/www"
     },
     "author": "Alles Rebel",

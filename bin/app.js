@@ -3,10 +3,10 @@ const express = require('express');
 
 // Local Requires
 require('./database'); // enable mongo database connection
-const indexRouter = require('./api/routes/index');
-const projectsRouter = require('./api/routes/projects');
-const tasksRouter = require('./api/routes/tasks');
-const usersRouter = require('./api/routes/users');
+const indexRouter = require('../api/routes/index');
+const projectsRouter = require('../api/routes/projects');
+const tasksRouter = require('../api/routes/tasks');
+const usersRouter = require('../api/routes/users');
 
 const app = express();
 
