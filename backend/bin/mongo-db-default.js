@@ -6,9 +6,9 @@
 require('./database');
 
 // Local Dependencies
-const Project = require('../api/models/project');
-const Task = require('../api/models/task');
-const User = require('../api/models/user');
+const Project = require('../models/project');
+const Task = require('../models/task');
+const User = require('../models/user');
 
 // finally pull in our mock data
 const usersMockData = require('./mock_data/users.json');
