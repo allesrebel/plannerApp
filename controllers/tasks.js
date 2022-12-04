@@ -71,6 +71,9 @@ const validateTask = async (req, currentState = null) => {
         return newObj;
     });
 
+    // variables used during validation
+    var requestedProjectId = null;
+
     // This is where we would check if all the items are here & valid
     for (const item of extractedItems) {
         // check for required properties!
@@ -120,14 +123,40 @@ const validateTask = async (req, currentState = null) => {
             }
         }
 
+        // Validate User Exists and record project_id, it should ultimately match project ID
         if (key === 'user_id' && value !== null) {
-            if (Boolean(await UserService.getUserById(value)) !== true)
+            const user = await UserService.getUserById(value);
+            if (Boolean(user) !== true) {
                 validRequest = false;
+            } else {
+                // got a valid user!
+                if (requestedProjectId) {
+                    // have we already recieved project information?
+                    // if so, make sure request project_ID matches this user's
+                    if (requestedProjectId !== user.project_id)
+                        validRequest = false;
+                } else {
+                    // we haven't seen project information yet, so let's cache it
+                    requestedProjectId = user.project_id;
+                }
+            }
         }
 
         if (key === 'project_id' && value !== null) {
-            if (Boolean(await ProjectService.getProjectById(value)) !== true)
-                validRequest = false;
+            const project = await ProjectService.getProjectById(value);
+            const project_id = value;
+            if (Boolean(project) !== true) validRequest = false;
+            else {
+                // we have a valid Project
+                if (requestedProjectId) {
+                    // we already have a cached project ID for this request from user
+                    // check if it matches the project_id here
+                    if (requestedProjectId !== project_id) validRequest = false;
+                } else {
+                    // we haven't seen project information, so cache it
+                    requestedProjectId = project_id;
+                }
+            }
         }
 
         // if we hit an invalid request early, we can exit early
