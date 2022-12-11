@@ -23,6 +23,12 @@ RESOURCE ROUTE tasks.js
 GET   /tasks
    - responds with all tasks
 
+GET   /tasks/enum_status
+   - responds with all valid status values in the schema
+
+GET   /tasks/enum_priority
+   - responds with all valid priority values in the schema
+
 GET   /tasks/:id
    - responds with task that matches with :id
    - If the task does not exist, return an error

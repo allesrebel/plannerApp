@@ -5,6 +5,12 @@ const TasksController = require('../controllers/tasks');
 /* GET tasks listing. */
 router.get('/', TasksController.getTasks);
 
+/* GET task enumeration of status values */
+router.get('/enum_status', TasksController.getTaskStatusEnum);
+
+/* GET task enumeration of priority values */
+router.get('/enum_priority', TasksController.getTaskPriorityEnum);
+
 /* GET task by id. */
 router.get('/:id', TasksController.getTaskById);
 

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 /* GET index listing. */
-router.get('/', function (req, res, next) {
+router.get('/', function (_, res) {
     res.json({
         available_json_apis: {
             projects: [
@@ -12,6 +12,8 @@ router.get('/', function (req, res, next) {
             ],
             tasks: [
                 'GET tasks',
+                'GET tasks/enum_status',
+                'GET tasks/enum_priority',
                 'GET tasks/:id',
                 'POST tasks',
                 'PUT tasks/:id',

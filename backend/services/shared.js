@@ -11,8 +11,8 @@ const all = async (Model, populate_items = []) => {
     if (populate_items.length != 0) {
         // create promises for populating the fields/paths requested
         var current_promise = Model.find({});
-        for await (const path of populate_items) {
-            current_promise = current_promise.populate(path);
+        for await (const [path, ignore] of populate_items) {
+            current_promise = current_promise.populate(path, ignore);
         }
     }
 

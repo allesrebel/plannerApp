@@ -1,235 +1,31 @@
-const ProjectService = require('../services/project');
 const TaskService = require('../services/task');
-const UserService = require('../services/user');
 
-/* GET tasks listing. */
+/* GET tasks listing.
+    Nothing special required by any assignment
+*/
 const getTasks = async (_, res) => {
-    res.json(await TaskService.getAllTasks());
+    try {
+        res.json(await TaskService.getAllTasks());
+    } catch (error) {
+        res.status(500).json({ message: error.toString() });
+    }
 };
 
 /* GET task by id. 
-    There should be property which represents the user assigned to the task
-        It should include the user's _id, first, last, isActive, etc
-    There should be a property represents the project the task is associated to
-        It should only include the _id of the project and name of the project
+    HW Requirements handled by Service Layer
 */
 const getTaskById = async (req, res) => {
     try {
-        const requestedId = req.params.id;
-        const task = await TaskService.getTaskById(requestedId, [
-            ['user_id', ''],
-            ['project_id', '-description -repository -manager_id'],
-        ]);
-        // send the matched item if found in DB
-        if (!task) {
-            // does not exist in the DB (or bad input)
-            res.status(404).json({ message: 'resource not found' });
-        } else {
-            // we got something valid from DB! convert into object
-            const TaskObj = task.toObject();
-            res.json(TaskObj);
-        }
+        res.status(200).json(await TaskService.getTaskById(req.params.id));
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: `${error}` });
+        res.status(500).json({ message: error.toString() });
     }
-};
-
-// Validate that the request contains a valid
-// task object (including validation rules)
-// Probably should refactor this from here and project's controller
-const validateTask = async (req, currentState = null) => {
-    // request status, while we go through and validate everything
-    let validRequest = true;
-
-    // validate that we actually have a request
-    if (Object.keys(req.body).length === 0) validRequest = false;
-
-    // validate the body of the request, + strip out un-needed properties
-    const properties = [
-        //'id', // assigned by db
-        'name',
-        'details',
-        'priority',
-        'status',
-        'timeline',
-        'user_id',
-        'project_id',
-    ];
-    const reqObj = req.body;
-
-    // create a map of the keys that we only want (dropping everything else)
-    const extractedItems = properties.map((property) => {
-        const newObj = {};
-        // does our request object have the required property?
-        // if so, replace the new object's value from the request object
-        if (property in reqObj) {
-            newObj[property] = reqObj[property];
-        } else {
-            newObj[property] = null;
-        }
-        return newObj;
-    });
-
-    // variables used during validation
-    var requestedProjectId = null;
-
-    // This is where we would check if all the items are here & valid
-    for (const item of extractedItems) {
-        // check for required properties!
-        // for now, the only required properties is name, let user do updates to fill everything else out
-        const [key, value] = Object.entries(item)[0];
-        // note, we only check for existence IF we don't a current state saved in the DB
-        if (currentState === null) {
-            if (key === 'name' && value === null) validRequest = false;
-            if (key === 'status' && value === null) validRequest = false;
-            if (key === 'priority' && value === null) validRequest = false;
-        }
-
-        // validate properties passed in
-
-        // perform validation on priority
-        if (key === 'priority' && value !== null) {
-            if (!['low', 'medium', 'high'].includes(value))
-                validRequest = false;
-        }
-
-        // perform validation on status
-        if (key === 'status' && value !== null) {
-            if (
-                !['assigned', 'in progress', 'in review', 'completed'].includes(
-                    value
-                )
-            )
-                validRequest = false;
-        }
-
-        // perform validation on timeline
-        if (key === 'timeline' && value !== null) {
-            // Note: value is actually a full on Javascript Object, with properties and values
-            const timelineObj = value;
-            const expectedProperties = [
-                'date_assigned',
-                'date_due',
-                'date_updated',
-            ];
-
-            for (const property of expectedProperties) {
-                // whoa, the in operator almost works like python ;) (minus the whole iterating thing)
-                if (!(property in timelineObj)) {
-                    validRequest = false;
-                    break;
-                }
-            }
-        }
-
-        // Validate User Exists and record project_id, it should ultimately match project ID
-        if (key === 'user_id' && value !== null) {
-            const user = await UserService.getUserById(value);
-            if (Boolean(user) !== true) {
-                validRequest = false;
-            } else {
-                // got a valid user!
-                if (requestedProjectId) {
-                    // have we already recieved project information?
-                    // if so, make sure request project_ID matches this user's
-                    if (requestedProjectId !== user.project_id)
-                        validRequest = false;
-                } else {
-                    // we haven't seen project information yet, so let's cache it
-                    requestedProjectId = user.project_id;
-                }
-            }
-        }
-
-        if (key === 'project_id' && value !== null) {
-            const project = await ProjectService.getProjectById(value);
-            const project_id = value;
-            if (Boolean(project) !== true) validRequest = false;
-            else {
-                // we have a valid Project
-                if (requestedProjectId) {
-                    // we already have a cached project ID for this request from user
-                    // check if it matches the project_id here
-                    if (requestedProjectId !== project_id) validRequest = false;
-                } else {
-                    // we haven't seen project information, so cache it
-                    requestedProjectId = project_id;
-                }
-            }
-        }
-
-        // if we hit an invalid request early, we can exit early
-        if (validRequest === false) break;
-    }
-
-    // apply state validation, only tasks with 'status' == 'assigned' can adjust everything
-    if (
-        validRequest &&
-        currentState !== null &&
-        currentState.status !== 'assigned'
-    ) {
-        // check extracted properties to see if user requested changes in any of these
-        const invalidProperties = [
-            //'id', // assigned by db
-            'name',
-            'details',
-            'priority',
-            // 'status', can always be changed
-            'timeline',
-            'user_id',
-            'project_id',
-        ];
-        for (const item of extractedItems) {
-            const [key, value] = Object.entries(item)[0];
-
-            if (invalidProperties.includes(key) && value !== null) {
-                validRequest = false;
-                break;
-            }
-        }
-    }
-
-    // finally, clean up the finalized object and send back to callee
-    const cleanObj = extractedItems.reduce((newRow, extractedItem) => {
-        return Object.assign(newRow, extractedItem);
-    }, {});
-
-    // strip out NULL values that shouldn't be in the object (minus timeline)
-    Object.keys(cleanObj).forEach((key) => {
-        if (cleanObj[key] === null || cleanObj[key] === undefined)
-            delete cleanObj[key]; // strip it
-    });
-
-    // add in timeline if it's null
-    if (cleanObj.timeline === null)
-        cleanObj.timeline = {
-            date_assigned: null,
-            date_due: null,
-            date_updated: null,
-        };
-
-    return { validRequest, cleanObj };
 };
 
 /* POST task - create a task */
 const createTask = async (req, res) => {
-    // Make sure the parameters of the new object are all valid
-    const { validRequest, cleanObj } = await validateTask(req);
-
-    // attempt to insert into database if the request looks good
     try {
-        // based on request status, return error or success w/ new item index
-        if (!validRequest) {
-            // invalid request, (name issue or bad input)
-            res.status(400).json({ message: 'bad request' });
-        } else {
-            // we got something valid from DB, assuming could insert, got new id
-            // we'll adjust the timestamp of the
-            cleanObj.timeline.date_updated = new Date().toLocaleDateString();
-            const result = await TaskService.createTask(cleanObj);
-            res.json(result);
-        }
+        res.status(200).json(await TaskService.createTask(req));
     } catch (error) {
         res.status(500).json({ message: `${error}` });
     }
@@ -239,42 +35,8 @@ const createTask = async (req, res) => {
     A task (name, detail and timeline object) is only able to be updated as long as the status is "assigned".  Status can always be updated.
 */
 const updateTask = async (req, res) => {
-    // keep track of the request as we go
-    let validRequest = true;
-
-    // check id can be parsed at all
-    if (!req.params.id) validRequest = false;
-
-    // check if we have an entry for this id
-    const taskObj = await TaskService.getTaskById(req.params.id);
-
-    // doesn't exist!
-    if (!taskObj) {
-        validRequest = false;
-    }
-
-    // finally validate the transaction (assuming task didn't exist in db)
-    // we'll simulate, because we're mocking a DB, we could also adjust validation
-    // to include a different set of properties instead
-    const results = await validateTask(req, taskObj);
-    if (!results.validRequest) validRequest = false;
-    const cleanObj = results.cleanObj;
-
     try {
-        if (!validRequest) {
-            // does not exist in the DB (or bad input)
-            res.status(400).json({ message: 'unable to perform update' });
-        } else {
-            // Attempt to do the update in the DB (ensures only valid properties are updated)
-            for (const [key, value] of Object.entries(cleanObj)) {
-                if (value !== null) taskObj[key] = value;
-            }
-            // finally update the timestamp
-            taskObj.timeline.date_updated = new Date().toLocaleDateString();
-            // do the update!
-            const result = await taskObj.save();
-            res.json(result);
-        }
+        res.status(200).json(await TaskService.updateTask(req));
     } catch (error) {
         res.status(500).json({ message: `${error}` });
     }
@@ -282,28 +44,31 @@ const updateTask = async (req, res) => {
 
 /* DELETE task - delete a task by ID */
 const deleteTask = async (req, res) => {
-    // keep track of the request as we go
-    let validRequest = true;
-
-    // check id can be parsed at all
-    if (!req.params.id) validRequest = false;
-
     try {
-        // check if we have an entry for this id
-        const taskObj = await TaskService.getTaskById(req.params.id);
+        await TaskService.removeTask(req);
+        res.status(200).json({ message: `task ${req.params.id} deleted` });
+    } catch (error) {
+        res.status(500).json({ message: `${error}` });
+    }
+};
 
-        // doesn't exist!
-        if (!taskObj) {
-            validRequest = false;
-        }
+/* GET TaskStatusEnums
+    to allow front end to have the right set of enums for forms
+*/
+const getTaskStatusEnum = (_, res) => {
+    try {
+        res.json(TaskService.getTaskStatusEnum());
+    } catch (error) {
+        res.status(500).json({ message: `${error}` });
+    }
+};
 
-        // Delete away if we're valid
-        if (validRequest) {
-            await taskObj.delete();
-            res.json({ message: `task ${req.params.id} deleted` });
-        } else {
-            res.status(400).json({ message: 'invalid request' });
-        }
+/* GET TaskPriorityEnums
+    to allow front end to have the right set of enums for forms
+*/
+const getTaskPriorityEnum = (_, res) => {
+    try {
+        res.json(TaskService.getTaskPriorityEnum());
     } catch (error) {
         res.status(500).json({ message: `${error}` });
     }
@@ -315,4 +80,7 @@ module.exports = {
     createTask,
     updateTask,
     deleteTask,
+
+    getTaskStatusEnum,
+    getTaskPriorityEnum,
 };
