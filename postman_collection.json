@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "3feb34b7-68dc-4ee4-8236-bbc07443ddce",
-		"name": "Homework2",
+		"name": "Planner Backend APIs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6594657"
 	},
@@ -83,7 +83,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/projects?name=cool",
+					"raw": "http://localhost:3000/projects?name=test",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -95,7 +95,7 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "cool"
+							"value": "test"
 						}
 					]
 				}
@@ -169,7 +169,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Super Cool test12334\",\r\n    \"manager_id\": \"6366186ed3ccb815ade629a7\",\r\n    \"description\": \"the coolest test\",\r\n    \"repository\": \"aweeeeeesome.com\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Super Cool test12334214124\",\r\n    \"manager_id\": \"638c08a1b1f25ab0a7a3df11\",\r\n    \"description\": \"the coolest test\",\r\n    \"repository\": \"aweeeeeesome.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -379,14 +379,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/projects/6366186ed3ccb815ade629b2",
+					"raw": "localhost:3000/projects/638c08a1b1f25ab0a7a3df1c",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"projects",
-						"6366186ed3ccb815ade629b2"
+						"638c08a1b1f25ab0a7a3df1c"
 					]
 				}
 			},
@@ -506,7 +506,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"name\":\"Super Cool P3owjeca33333efgt\"}",
+					"raw": "{\"name\":\"Super Cool test\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -514,14 +514,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/projects/6366186ed3ccb815ade629b2",
+					"raw": "localhost:3000/projects/638c08a1b1f25ab0a7a3df1c",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"projects",
-						"6366186ed3ccb815ade629b2"
+						"638c08a1b1f25ab0a7a3df1c"
 					]
 				}
 			},
@@ -728,7 +728,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"testy tesegaegt\",\r\n    \"details\": \"whoa!\",\r\n    \"priority\": \"low\",\r\n    \"status\": \"assigned\",\r\n    \"timeline\": {\r\n        \"date_assigned\": \"2022-09-30T07:00:00.000Z\",\r\n        \"date_due\": \"2022-09-30T07:00:00.000Z\",\r\n        \"date_updated\": \"2022-11-05T07:00:00.000Z\"\r\n    },\r\n    \"user_id\": \"6366186ed3ccb815ade629ab\",\r\n    \"project_id\": \"6366186ed3ccb815ade629b4\"\r\n}",
+					"raw": "{\r\n    \"name\": \"testy tesegaegt\",\r\n    \"details\": \"whoa!\",\r\n    \"priority\": \"low\",\r\n    \"status\": \"assigned\",\r\n    \"timeline\": {\r\n        \"date_assigned\": \"2022-09-30T07:00:00.000Z\",\r\n        \"date_due\": \"2022-09-30T07:00:00.000Z\",\r\n        \"date_updated\": \"2022-11-05T07:00:00.000Z\"\r\n    },\r\n    \"user_id\": \"638c08a1b1f25ab0a7a3df13\",\r\n    \"project_id\": \"638c08a1b1f25ab0a7a3df1c\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -877,14 +877,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/tasks/6366186fd3ccb815ade629b8",
+					"raw": "localhost:3000/tasks/638c08a2b1f25ab0a7a3df34",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"tasks",
-						"6366186fd3ccb815ade629b8"
+						"638c08a2b1f25ab0a7a3df34"
 					]
 				}
 			},
@@ -1012,14 +1012,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/tasks/6366186fd3ccb815ade629b8",
+					"raw": "localhost:3000/tasks/6395309afce22990119ad274",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"tasks",
-						"6366186fd3ccb815ade629b8"
+						"6395309afce22990119ad274"
 					]
 				}
 			},
@@ -1156,14 +1156,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/tasks/63662dd77e62686f0f730061",
+					"raw": "localhost:3000/tasks/6395309afce22990119ad274",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"tasks",
-						"63662dd77e62686f0f730061"
+						"6395309afce22990119ad274"
 					]
 				}
 			},
@@ -1353,7 +1353,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/users?active=false",
+					"raw": "localhost:3000/users?active",
 					"host": [
 						"localhost"
 					],
@@ -1364,7 +1364,7 @@
 					"query": [
 						{
 							"key": "active",
-							"value": "false"
+							"value": null
 						}
 					]
 				}
@@ -1436,14 +1436,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/users/6366186ed3ccb815ade629ab",
+					"raw": "localhost:3000/users/638c08a1b1f25ab0a7a3df15",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"users",
-						"6366186ed3ccb815ade629ab"
+						"638c08a1b1f25ab0a7a3df15"
 					]
 				}
 			},
@@ -1563,7 +1563,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"active\": false\r\n}",
+					"raw": "{\r\n    \"active\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1571,14 +1571,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/users/6366186ed3ccb815ade629ab",
+					"raw": "localhost:3000/users/639537aeea507edb93cd2abe",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"users",
-						"6366186ed3ccb815ade629ab"
+						"639537aeea507edb93cd2abe"
 					]
 				}
 			},
@@ -1708,6 +1708,44 @@
 					"body": "{\n    \"message\": \"unable to perform update\"\n}"
 				}
 			]
+		},
+		{
+			"name": "Get all Status Enums",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tasks/enum_status",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks",
+						"enum_status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Priority Enums",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tasks/enum_priority",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks",
+						"enum_priority"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
