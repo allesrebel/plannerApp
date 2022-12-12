@@ -1,6 +1,8 @@
 <script setup>
 import ProjectForm from './ProjectForm.vue';
 import TaskForm from './TaskForm.vue';
+import { useRoute } from 'vue-router';
+
 const props = defineProps({
     project: Object,
     task: Object,
@@ -12,6 +14,7 @@ const props = defineProps({
     flashBanner: Object,
 });
 const emit = defineEmits(['closeModal', 'error']);
+const form_type = useRoute().name;
 
 function handleError(message) {
     emit('error', message);
@@ -30,9 +33,6 @@ function handleError(message) {
             <div class="status" v-if="flashBanner">
                 <p>{{ flashBanner.message }}</p>
             </div>
-
-            <!-- <p>{{ project }}</p> -->
-
             <TaskForm
                 v-if="task"
                 v-bind:task="task"
@@ -45,6 +45,7 @@ function handleError(message) {
             ></TaskForm>
             <TaskForm
                 v-else
+                v-show="form_type === 'tasks'"
                 v-bind:available_users="available_users"
                 v-bind:available_projects="available_projects"
                 v-bind:status_enum="status_enum"
@@ -58,6 +59,14 @@ function handleError(message) {
                 v-bind:project="project"
                 v-bind:available_users="available_users"
                 @closeModal="$emit('closeModal')"
+                @error="handleError"
+            ></ProjectForm>
+            <ProjectForm
+                v-else
+                v-show="form_type === 'projects'"
+                v-bind:available_users="available_users"
+                @closeModal="$emit('closeModal')"
+                @error="handleError"
             ></ProjectForm>
         </div>
     </div>

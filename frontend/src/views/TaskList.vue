@@ -105,6 +105,14 @@ export default {
             return vm.setData(tasks);
         });
     },
+
+    // deal with the case where user routes away from tasks, but had
+    // data boud to some properties, we'll just delete everything to be
+    // save
+    async beforeRouteLeave(to, from, next) {
+        this.setData(null);
+        next();
+    },
 };
 </script>
 

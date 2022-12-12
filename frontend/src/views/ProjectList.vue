@@ -27,6 +27,7 @@ export default {
             isLoaded: false,
             idModal: null,
             showModal: false,
+            error_msg: null,
         };
     },
     methods: {
@@ -39,16 +40,23 @@ export default {
                 );
                 const project = await projectRes.json();
                 this.project = project;
-
-                // we'll load users that can be added to this project
-                const userRes = await fetch(`http://localhost:3000/users`);
-                const users = await userRes.json();
-                this.available_users = users;
-            }
-            // else this means we should have an empty form for the user
-            else {
+            } else {
                 this.project = null;
             }
+            // we'll load users that can be added to this project
+            const userRes = await fetch(`http://localhost:3000/users`);
+            const users = await userRes.json();
+            this.available_users = users;
+
+            // TODO: didn't finish this!!!
+            // // else this means we should have an empty form for the user
+            // // filter the available users, if there's a project selected
+            // if (this.project) {
+            //     this.available_users = this.available_users.filter((user) => {
+            //         user.project_id === this.project.id;
+            //     });
+            // }
+
             this.showModal = true;
         },
         async setModal(id) {
@@ -60,9 +68,18 @@ export default {
             if (modalId) await this.setModal(modalId);
             this.isLoaded = true;
         },
-        closeModal() {
+        async closeModal() {
+            this.error_msg = null;
             this.$router.push('/projects');
             this.showModal = false;
+
+            // fetch all projects anyway, once user exists modal, we'll need to show them
+            const projectsRes = await fetch(`http://localhost:3000/projects`);
+            const projects = await projectsRes.json();
+            this.projects = projects;
+        },
+        handleError(message) {
+            this.error_msg = message;
         },
     },
     // This deals with switches into this page, and checks query params
@@ -86,9 +103,7 @@ export default {
         <template #heading>List of Projects</template>
         <p>
             Click a project to view details or
-            <button disabled @click="setModal(null)">
-                Add New Project (didn't finish this)
-            </button>
+            <button @click="setModal(null)">Add New Project</button>
         </p>
     </Tile>
     <template v-show="isLoaded" v-for="project in projects">
@@ -96,10 +111,6 @@ export default {
             <template #heading>{{ project.name }}</template>
             <p>{{ project.description }}</p>
             <p>{{ project.repository }}</p>
-            <p>
-                managed by {{ project.manager_id.first_name }}
-                {{ project.manager_id.last_name }}
-            </p>
         </Tile>
     </template>
 
@@ -107,7 +118,9 @@ export default {
         v-if="showModal"
         v-bind:project="project"
         v-bind:available_users="available_users"
+        v-bind:flashBanner="error_msg"
         @closeModal="closeModal"
+        @error="handleError"
     />
 </template>
 

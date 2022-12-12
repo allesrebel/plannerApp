@@ -98,12 +98,21 @@ export default {
             else this.$emit('closeModal');
         },
     },
+    moveToProjectView(id = null) {
+        this.$router.push(
+            `/projects?id=${id}` //&project_id=${project_id}` was going to do filters too
+        );
+    },
     created() {
         if (this.task && this.task._id) {
             this.task_copy = { ...this.task };
             this.assigned_user = this.task_copy.user_id._id;
             this.assigned_project = this.task_copy.project_id._id;
         } else {
+            // graph the URL param if one exists
+            if (this.$route.query.project_id)
+                this.assigned_project = this.$route.query.project_id;
+
             const date = Date.now();
 
             this.task_copy = {
