@@ -1,34 +1,63 @@
 <script setup>
 import ProjectForm from './ProjectForm.vue';
+import TaskForm from './TaskForm.vue';
 const props = defineProps({
     project: Object,
     task: Object,
     available_users: Array,
-    priorities: Array,
-    statuses: Array,
+    available_projects: Array,
+    priority_enum: Array,
+    status_enum: Array,
     project_name: String,
+    flashBanner: Object,
 });
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(['closeModal', 'error']);
+
+function handleError(message) {
+    emit('error', message);
+}
 </script>
 
 <template>
     <div class="modal-container">
         <div class="modal">
             <div class="toolbar">
-                <button class="modal-button" v-if="project || task">
-                    Modify
-                </button>
                 <button class="modal-button" @click="$emit('closeModal')">
                     Close
                 </button>
             </div>
 
+            <div class="status" v-if="flashBanner">
+                <p>{{ flashBanner.message }}</p>
+            </div>
+
             <!-- <p>{{ project }}</p> -->
+
+            <TaskForm
+                v-if="task"
+                v-bind:task="task"
+                v-bind:available_users="available_users"
+                v-bind:available_projects="available_projects"
+                v-bind:status_enum="status_enum"
+                v-bind:priority_enum="priority_enum"
+                @closeModal="$emit('closeModal')"
+                @error="handleError"
+            ></TaskForm>
+            <TaskForm
+                v-else
+                v-bind:available_users="available_users"
+                v-bind:available_projects="available_projects"
+                v-bind:status_enum="status_enum"
+                v-bind:priority_enum="priority_enum"
+                @closeModal="$emit('closeModal')"
+                @error="handleError"
+            ></TaskForm>
 
             <ProjectForm
                 v-if="project"
                 v-bind:project="project"
                 v-bind:available_users="available_users"
+                @closeModal="$emit('closeModal')"
             ></ProjectForm>
         </div>
     </div>
@@ -62,10 +91,9 @@ const emit = defineEmits(['closeModal']);
     border-radius: 50px;
     cursor: pointer;
     font-size: 14px;
-    display: block;
-    width: 33%;
-    padding: 2px;
-    margin: 20px auto;
+    width: 22%;
+    padding: 6px;
+    margin: 20px 20px;
 }
 .modal-button:hover {
     background: #8d99ae;

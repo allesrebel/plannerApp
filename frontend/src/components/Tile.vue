@@ -55,17 +55,11 @@ h3 {
     color: var(--color-heading);
 }
 
-router-link-active {
-    color: var(--color-text);
-}
-router-link-active:hover {
-    background-color: transparent;
-}
-
-router-link-active {
+.router-link-active {
     display: inline-block;
     padding: 0 1rem;
     border-left: 1px solid var(--color-border);
+    color: var(--color-text);
 }
 
 @media (min-width: 1024px) {

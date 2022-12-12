@@ -21,7 +21,7 @@ const getTaskPriorityEnum = () => {
 const validateRequest = async (req, currentState = null) => {
     // validate that we actually have a request
     if (Object.keys(req.body).length === 0)
-        throw new Error(`input data is empty`);
+        throw new Error(`input data is empty or there were no changes`);
 
     // validate the body of the request, + strip out un-needed properties
     const properties = [
@@ -120,7 +120,10 @@ const validateRequest = async (req, currentState = null) => {
                     );
             } else {
                 // we haven't seen project information yet, so let's cache it
-                requestedProjectId = user.project_id.toString();
+                if (user.project_id)
+                    requestedProjectId = user.project_id.toString();
+                // is possible user does NOT have a project
+                else throw new Error(`managers aren't supposed to work!`);
             }
         }
 

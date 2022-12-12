@@ -32,7 +32,7 @@ const setValidationAndExists = async (Service, ids) => {
 const validateRequest = async (req, bypass_required_properties = false) => {
     // validate that we actually have a request
     if (Object.keys(req.body).length === 0)
-        throw new Error(`input data is empty`);
+        throw new Error(`input data is empty or there were no changes`);
 
     // validate the body of the request, + strip out un-needed properties
     const properties = [

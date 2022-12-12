@@ -12,6 +12,7 @@ export default {
         };
     },
     methods: {
+        // Did not complete creation of projects!!
         async addProject() {
             // create an object called data
             // spread the project data
@@ -28,10 +29,6 @@ export default {
         },
 
         async updateProject() {
-            // our GET by :id uses populate to populate all the tasks
-            // remove tasks before crafting data object
-            delete this.project.tasks;
-
             // create a data object just like in addProject
             const data = {
                 ...this.project,
@@ -41,6 +38,12 @@ export default {
 
             // view this console.log in your browser
             console.log(JSON.stringify(data));
+        },
+
+        moveToTaskView(task_id = null, project_id = null) {
+            this.$router.push(
+                `/tasks?task_id=${task_id}&project_id=${project_id}`
+            );
         },
     },
     async created() {
@@ -97,10 +100,16 @@ export default {
                 </select>
             </div>
             <div v-if="project.id && project.tasks">
-                <label>Tasks in Project (click for details)</label>
+                <label>Tasks in Project (click task for details)</label>
                 <select multiple>
-                    <option v-for="task in project.tasks" @click="">
+                    <option
+                        v-for="task in project.tasks"
+                        @click="moveToTaskView(task._id, project.id)"
+                    >
                         {{ task.name }}: {{ task.details }}
+                    </option>
+                    <option disabled @click="moveToTaskView(null, project.id)">
+                        Add Task to this Project
                     </option>
                 </select>
             </div>

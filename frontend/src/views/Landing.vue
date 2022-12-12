@@ -9,6 +9,10 @@ import Tile from '../components/Tile.vue';
         <p>
             Decided to reuse the styling done by Vue's tutorial (it's neat too!)
         </p>
+        <p>
+            Not just that though, reused some of the modal code too. It works
+            great!
+        </p>
     </Tile>
 </template>
 

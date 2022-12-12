@@ -86,7 +86,9 @@ export default {
         <template #heading>List of Projects</template>
         <p>
             Click a project to view details or
-            <button @click="setModal(null)">Add New Project</button>
+            <button disabled @click="setModal(null)">
+                Add New Project (didn't finish this)
+            </button>
         </p>
     </Tile>
     <template v-show="isLoaded" v-for="project in projects">
